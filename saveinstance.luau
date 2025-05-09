@@ -2130,7 +2130,26 @@ local function synsaveinstance(CustomOptions, CustomOptions2)
 			table.insert(ToSaveList, 1, ToSaveInstance)
 		end
 	end
+if OPTIONS.NilInstances then
+    local function collectContainers(root, containers)
+        for _, inst in ipairs(root:GetDescendants()) do
+            if inst:IsA("Model") or inst:IsA("Folder") or inst:IsA("Script") or inst:IsA("LocalScript") or inst:IsA("ModuleScript") then
+                table.insert(containers, inst)
+            end
+        end
+    end
 
+    local containers = {}
+    collectContainers(game, containers)
+    -- Optionally, remove duplicates if any
+    local seen = {}
+    for _, inst in ipairs(containers) do
+        if not seen[inst] then
+            table.insert(ToSaveList, inst)
+            seen[inst] = true
+        end
+    end
+end
 	local IsolateLocalPlayer = OPTIONS.IsolateLocalPlayer
 	local IsolateLocalPlayerCharacter = OPTIONS.IsolateLocalPlayerCharacter
 	local IsolatePlayers = OPTIONS.IsolatePlayers
